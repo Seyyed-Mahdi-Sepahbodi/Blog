@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from blog.models import validate_file_extension
 
 # Create your models here.
 
@@ -9,7 +10,7 @@ def user_profile_avatar_path(instance, filename):
 
 class UserProfile(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='کاربر')
-    avatar = models.FieldFile(upload_to=user_profile_avatar_path, verbose_name='آواتار')
+    avatar = models.FieldFile(upload_to=user_profile_avatar_path, validators=[validate_file_extension], verbose_name='آواتار')
     description = models.CharField(max_length='512', verbose_name='توضیحات')
 
     def filename(self):

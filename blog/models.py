@@ -1,8 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.html import format_html
-
-
+from ckeditor.fields import RichTextField
+from datetime import datetime
 # Create your models here.
 
 def post_cover_path(instance, filename):
@@ -12,6 +12,14 @@ def post_cover_path(instance, filename):
 def category_cover_path(instance, filename):
     path = f'upload/category/cover/{instance.title}/{filename}'
     return path
+
+def validate_file_extension(value):
+    import os 
+    from django.core.exceptions import ValidationError
+    extension = os.path.splitext(value.name)[1]
+    valid_extensions = ['.jpg', '.png']
+    if not extension.lower() in valid_extensions:
+        raise ValidationError('Unsupported file extension!')
 
 class Post(models.Model):
     PUBLISHED = 'PUB'
@@ -26,13 +34,13 @@ class Post(models.Model):
     ]
     title = models.CharField(max_length=100, unique=True, verbose_name='عنوان')
     short_description = models.CharField(max_length=255, verbose_name='خلاصه')
-    cover = models.ImageField(upload_to=post_cover_path, blank=True, null=True, verbose_name='تصویر')
-    body = models.TextField(verbose_name='متن')
+    cover = models.ImageField(upload_to=post_cover_path, blank=True, null=True, validators=[validate_file_extension], verbose_name='تصویر')
+    body = RichTextField(verbose_name='محتوا')
     author = models.ForeignKey(User, on_delete=models.DO_NOTHING, verbose_name='نویسنده')
     slug = models.SlugField(verbose_name='کد شماره صفحه', unique=True, null=True, blank=True)
-    category = models.ManyToManyField('blog.Category', verbose_name='دسته بندیها', related_name='category_posts')
+    category = models.ManyToManyField('Category', verbose_name='دسته بندیها', related_name='category_posts')
     # tag = models.ManyToManyField('blog.Tag', verbose_name='تگ ها', related_name='tag_posts', blank=True)
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name='زمان ایجاد', null=True)
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='زمان ایجاد')
     updated_at = models.DateField(auto_now=True, verbose_name='زمان بروزرسانی')
     study_time = models.IntegerField(null=True, verbose_name='مدت زمان تقریبی مطالعه')
     status = models.CharField(max_length=3, choices=POST_STATUS_CHOICES, default=DRAFT, verbose_name='وضعیت')
@@ -76,7 +84,7 @@ class Comment(models.Model):
 
 class Category(models.Model):
     title = models.CharField(max_length=50, unique=True, verbose_name='عنوان')
-    cover = models.ImageField(upload_to=category_cover_path, null=True, blank=True, verbose_name='تصویر')
+    cover = models.ImageField(upload_to=category_cover_path, null=True, blank=True, validators=[validate_file_extension], verbose_name='تصویر')
     short_description = models.TextField(verbose_name='توضیح مختصر')
     parent = models.ForeignKey('self', name='child', on_delete=models.CASCADE, null=True, blank=True, verbose_name='دسته‌بندی مرجع')
 
