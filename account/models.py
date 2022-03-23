@@ -1,8 +1,9 @@
 from django.db import models
-from django.contrib.auth.models import User
-from blog.models import validate_file_extension
+from django.contrib.auth.models import AbstractUser
+from django.contrib.auth import get_user_model
+from blog.validators import validate_file_extension
 from django.utils.html import format_html
-
+from django.utils import timezone
 
 # Create your models here.
 
@@ -10,8 +11,22 @@ def user_profile_avatar_path(instance, filename):
     path = f'upload/user_profile/avatars/{instance.user.username}/{filename}'
     return path
 
+class CustomUser(AbstractUser):
+    is_author = models.BooleanField(default=False, verbose_name='وضعیت نویسندگی')
+    special_user = models.DateTimeField(default=timezone.now, verbose_name='کاربر ویژه تا')
+    age = models.SmallIntegerField(null=True)
+
+    def get_user_full_name(self):
+        return self.first_name + " " + self.last_name
+
+    def is_special_user(self):
+        if self.special_user > timezone.now():
+            return True
+        return False
+
+
 class UserProfile(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='کاربر')
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, verbose_name='کاربر')
     avatar = models.FileField(upload_to=user_profile_avatar_path, validators=[validate_file_extension], verbose_name='آواتار')
     description = models.CharField(max_length=512, verbose_name='توضیحات')
 

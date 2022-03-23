@@ -1,12 +1,14 @@
 from datetime import datetime
 
 from ckeditor.fields import RichTextField
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.db import models
 from django.template.defaultfilters import slugify
 from django.utils.html import format_html
 
 # Create your models here.
+
+user = get_user_model()
 
 def post_cover_path(instance, filename):
     path = f'upload/post/cover/{instance.title}/{filename}'
@@ -40,7 +42,7 @@ class Post(models.Model):
     short_description = models.CharField(max_length=255, verbose_name='خلاصه')
     cover = models.ImageField(upload_to=post_cover_path, blank=True, null=True, validators=[validate_file_extension], verbose_name='تصویر')
     body = RichTextField(verbose_name='محتوا')
-    author = models.ForeignKey(User, on_delete=models.DO_NOTHING, verbose_name='نویسنده')
+    author = models.ForeignKey(user, on_delete=models.DO_NOTHING, verbose_name='نویسنده')
     slug = models.SlugField(unique=True, allow_unicode=True, null=True, blank=True, verbose_name='کد صفحه')
     category = models.ForeignKey('Category', on_delete=models.PROTECT, null=True, blank=True, related_name='category_posts', verbose_name='دسته بندیها')
     # tag = models.ManyToManyField('blog.Tag', verbose_name='تگ ها', related_name='tag_posts', blank=True)
@@ -103,7 +105,7 @@ class Category(models.Model):
 
 
 class Comment(models.Model):
-    author = models.ForeignKey(User, null=True, on_delete=models.SET_NULL, verbose_name='نویسنده')
+    author = models.ForeignKey(user, null=True, on_delete=models.SET_NULL, verbose_name='نویسنده')
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments', null=True, verbose_name='پست')
     body = models.TextField(verbose_name='محتوا')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ ایجاد')

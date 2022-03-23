@@ -5,4 +5,4 @@ from django.views import View
 
 class PanelMainPageView(View):
     def get(self, request):
-        return render(request, 'registration/home.html')
+        return render(request, 'panel/home.html')

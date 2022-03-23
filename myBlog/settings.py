@@ -43,9 +43,10 @@ INSTALLED_APPS = [
     'ckeditor',
 
     # my apps
+    'account.apps.AccountConfig',
     'blog.apps.BlogConfig',
-    'user.apps.UserConfig',
     'panel.apps.PanelConfig',
+    
 ]
 
 MIDDLEWARE = [
@@ -143,3 +144,6 @@ CKEDITOR_UPLOAD_PATH = "uploads/"
 # MEDIA Settings
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
+AUTH_USER_MODEL = 'account.CustomUser'
