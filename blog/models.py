@@ -11,11 +11,11 @@ from django.utils.html import format_html
 user = get_user_model()
 
 def post_cover_path(instance, filename):
-    path = f'upload/post/cover/{instance.title}/{filename}'
+    path = f'post/cover/{instance.title}/{filename}'
     return path
 
 def category_cover_path(instance, filename):
-    path = f'upload/category/cover/{instance.title}/{filename}'
+    path = f'category/cover/{instance.title}/{filename}'
     return path
 
 def validate_file_extension(value):
@@ -52,6 +52,7 @@ class Post(models.Model):
     status = models.CharField(max_length=3, choices=POST_STATUS_CHOICES, default=DRAFT, verbose_name='وضعیت')
 
     class Meta:
+        ordering = ['-created_at']
         verbose_name = 'پست'
         verbose_name_plural = 'پست ها'
 
@@ -59,7 +60,9 @@ class Post(models.Model):
         return os.path.basename(self.cover.name)
 
     def cover_tag(self):
-        return format_html(f"<img src='{self.cover.url}' height='100px' width='100px' style='border-radius: 5px;'")
+        if self.cover:
+            return format_html(f"<img src='{self.cover.url}' height='100px' width='100px' style='border-radius: 5px;'")
+        return format_html("<p>-</p>")
     cover_tag.short_description = 'تصویر'
 
     def __str__(self):
