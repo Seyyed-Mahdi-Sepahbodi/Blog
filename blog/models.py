@@ -50,6 +50,7 @@ class Post(models.Model):
     updated_at = models.DateField(auto_now=True, verbose_name='زمان بروزرسانی')
     study_time = models.IntegerField(null=True, verbose_name='مدت زمان تقریبی مطالعه')
     status = models.CharField(max_length=3, choices=POST_STATUS_CHOICES, default=DRAFT, verbose_name='وضعیت')
+    promote = models.BooleanField(default=False)
 
     class Meta:
         ordering = ['-created_at']

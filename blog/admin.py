@@ -4,9 +4,9 @@ from .models import Post, Category, Comment
 # Register your models here.
 
 class PostAdmin(admin.ModelAdmin):
-    list_display = ['title', 'author', 'slug', 'category', 'status', 'cover_tag']
+    list_display = ['title', 'author', 'slug', 'category', 'status', 'promote', 'cover_tag']
     # list_display = ['title', 'author', 'slug', 'category', 'status']
-    list_editable = ('status',)
+    list_editable = ('status', 'promote')
     search_fields = ['title', 'body']
     list_filter = ('category', 'status')
     date_hierarchy = ('created_at')
@@ -22,6 +22,7 @@ class PostAdmin(admin.ModelAdmin):
                 'category',
                 'study_time',
                 'status',
+                'promote',
             ),
         }),
         ('advanced options', {

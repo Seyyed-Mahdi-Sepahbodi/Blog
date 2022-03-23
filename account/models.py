@@ -28,8 +28,8 @@ class CustomUser(AbstractUser):
 
 
 class UserProfile(models.Model):
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, verbose_name='کاربر')
-    avatar = models.FileField(upload_to=user_profile_avatar_path, validators=[validate_file_extension], verbose_name='آواتار')
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='userprofiles', verbose_name='کاربر')
+    avatar = models.FileField(upload_to=user_profile_avatar_path, null=True, blank=True, validators=[validate_file_extension], verbose_name='آواتار')
     description = models.CharField(max_length=512, verbose_name='توضیحات')
 
     class Meta:
