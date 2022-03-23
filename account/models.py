@@ -23,6 +23,8 @@ class CustomUser(AbstractUser):
         if self.special_user > timezone.now():
             return True
         return False
+    is_special_user.boolean = True
+    is_special_user.short_description = 'وضعیت کاربر ویژه'
 
 
 class UserProfile(models.Model):
