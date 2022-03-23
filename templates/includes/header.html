@@ -1,0 +1,28 @@
+<header class="s-header header">
+
+    <div class="header__logo">
+        <a class="logo" href="index.html">
+            وبلاگ اِکو
+        </a>
+    </div> <!-- end header__logo -->
+
+    <a class="header__toggle-menu" href="#0" title="Menu"><span>منو</span></a>
+    <nav class="header__nav-wrap">
+
+        <h2 class="header__nav-heading h6">هدایت به</h2>
+
+        <ul class="header__nav">
+            <li><a href="{% url 'blog:contact' %}" title="">تماس</a></li>
+            <li><a href="page-about.html" title="">درباره</a></li>
+            <li>
+                <a href="#0" title="">دسته بندی</a>
+            </li>
+
+            <li class="current"><a href="{% url 'blog:home' %}" title="">خانه</a></li>
+        </ul> <!-- end header__nav -->
+
+        <a href="#0" title="Close Menu" class="header__overlay-close close-mobile-menu">بستن</a>
+
+    </nav> <!-- end header__nav-wrap -->
+
+</header>

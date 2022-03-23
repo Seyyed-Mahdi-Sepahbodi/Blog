@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.views.generic import ListView
+from django.views.generic import ListView, TemplateView
 from .models import Post
 
 # Create your views here.
@@ -16,3 +16,7 @@ class HomePageView(ListView):
         context['paginate_page_range'] = range(1, paginate_page_range + 1)
         context['all_promote_posts'] = all_promote_posts
         return context
+
+
+class ContactPageView(TemplateView):
+    template_name = 'blog/page-contact.html'
