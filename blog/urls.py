@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import HomePageView, ContactPageView, AllPostsAPIView
+from .views import HomePageView, ContactPageView, AllPostsAPIView, PostDetailAPIView
 
 app_name = 'blog'
 urlpatterns = [
@@ -8,4 +8,5 @@ urlpatterns = [
 
     # apis
     path('api/post/all/', AllPostsAPIView.as_view(), name='all-posts'),
+    path('api/post/<int:pk>/', PostDetailAPIView.as_view(), name='detail-post'),
 ]

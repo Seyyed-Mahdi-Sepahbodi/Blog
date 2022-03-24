@@ -9,7 +9,7 @@ class AllPostsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        exclude = ('body', 'slug')
+        exclude = ('body', 'slug', 'created_at')
 
     def get_category(self, instance):
         if instance.category:
@@ -29,3 +29,16 @@ class AllPostsSerializer(serializers.ModelSerializer):
         elif instance.status == 'PEN':
             return 'در صف تایید'
         return 'حذف شده'
+
+
+class PostDetailSerializer(serializers.ModelSerializer):
+    category = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Post
+        exclude = ['id', 'author', 'status', 'created_at', 'promote', 'slug']
+
+    def get_category(self, instance):
+        if instance.category:
+            return instance.category.title
+        return None
