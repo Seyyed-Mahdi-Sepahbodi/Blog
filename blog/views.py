@@ -1,8 +1,9 @@
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView, TemplateView
 from .models import Post
-from rest_framework.generics import ListAPIView, RetrieveAPIView
-from .serializers import AllPostsSerializer, PostDetailSerializer
+from rest_framework.generics import ListAPIView, RetrieveAPIView, CreateAPIView
+from .serializers import AllPostsSerializer, PostDetailSerializer, PostCreateSerializer
+from rest_framework.views import APIView
 
 # Create your views here.
 
@@ -25,7 +26,7 @@ class ContactPageView(TemplateView):
 
 
 class AllPostsAPIView(ListAPIView):
-    queryset = Post.objects.all().order_by('-created_at')
+    queryset = Post.objects.all().order_by('-updated_at')
     serializer_class = AllPostsSerializer
 
 
@@ -33,3 +34,16 @@ class PostDetailAPIView(RetrieveAPIView):
     queryset = Post.objects.all()
     serializer_class = PostDetailSerializer
 
+
+class PostSearchAPIView(ListAPIView):
+    serializer_class = AllPostsSerializer
+
+    def get_queryset(self):
+        from django.db.models import Q
+        query = self.request.GET['query']
+        return Post.objects.filter(Q(title__icontains=query) | Q(body__icontains=query)).order_by('-updated_at')    
+
+
+class PostCreateAPIView(CreateAPIView):
+    model = Post
+    serializer_class = PostCreateSerializer
