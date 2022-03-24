@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from django.views.generic import ListView, TemplateView
 from .models import Post
+from rest_framework.generics import ListAPIView
+from .serializers import AllPostsSerializer
 
 # Create your views here.
 
@@ -20,3 +22,8 @@ class HomePageView(ListView):
 
 class ContactPageView(TemplateView):
     template_name = 'blog/page-contact.html'
+
+
+class AllPostsAPIView(ListAPIView):
+    queryset = Post.objects.all().order_by('-created_at')
+    serializer_class = AllPostsSerializer
