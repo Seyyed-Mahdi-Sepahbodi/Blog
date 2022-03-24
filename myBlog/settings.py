@@ -41,6 +41,7 @@ INSTALLED_APPS = [
 
     # third-party apps
     'ckeditor',
+    'rest_framework',
 
     # my apps
     'account.apps.AccountConfig',
