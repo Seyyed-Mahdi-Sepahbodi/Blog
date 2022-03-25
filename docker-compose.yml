@@ -1,6 +1,23 @@
 version: '3'
 
 services:
+  myblog:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/myBlog
+      - myBlog_static_volume:/myBlog/static
+      - myBlog_media_volume:/myBlog/media
+    restart: always
+    ports:
+      - "8000:8000"
+    networks:
+      - myBlog_network
+      - nginx_network
+    depends_on:
+      - myBlog_postgresql
+
   myBlog_postgresql:
     image: postgres:12
     container_name: myBlog_postgresql
@@ -17,6 +34,13 @@ services:
 volumes:
   myBlog_postgresql:
     external: true
+  myBlog_static_volume:
+    external: true
+  myBlog_media_volume:
+    external: true
+
 networks:
   myBlog_network:
+    external: true
+  nginx_network:
     external: true
