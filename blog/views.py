@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView, TemplateView
 from .models import Post
-from rest_framework.generics import ListAPIView, RetrieveAPIView, CreateAPIView, UpdateAPIView
+from rest_framework.generics import ListAPIView, RetrieveAPIView, CreateAPIView, UpdateAPIView, DestroyAPIView
 from .serializers import AllPostsSerializer, PostDetailSerializer, PostCreateSerializer, PostUpdateSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -52,3 +52,7 @@ class PostCreateAPIView(CreateAPIView):
 class PostUpdateAPIView(UpdateAPIView):
     queryset = Post.objects.all()
     serializer_class = PostUpdateSerializer
+
+
+class PostDeleteAPIView(DestroyAPIView):
+    queryset = Post.objects.all()

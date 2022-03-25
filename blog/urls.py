@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import HomePageView, ContactPageView, AllPostsAPIView, PostDetailAPIView, PostSearchAPIView, PostCreateAPIView, PostUpdateAPIView
+from .views import HomePageView, ContactPageView, AllPostsAPIView, PostDetailAPIView, PostSearchAPIView, PostCreateAPIView, PostUpdateAPIView, PostDeleteAPIView
 
 app_name = 'blog'
 urlpatterns = [
@@ -12,4 +12,5 @@ urlpatterns = [
     path('api/post/search/', PostSearchAPIView.as_view(), name='search-post'),
     path('api/post/create/', PostCreateAPIView.as_view(), name='create-post'),
     path('api/post/<int:pk>/update/', PostUpdateAPIView.as_view(), name='update-post'),
+    path('api/post/<int:pk>/delete/', PostDeleteAPIView.as_view(), name='delete-post'),
 ]
