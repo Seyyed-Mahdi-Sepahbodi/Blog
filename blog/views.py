@@ -1,11 +1,14 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from django.views.generic import ListView, TemplateView
-from .models import Post
-from rest_framework.generics import ListAPIView, RetrieveAPIView, CreateAPIView, UpdateAPIView, DestroyAPIView
-from .serializers import AllPostsSerializer, PostDetailSerializer, PostCreateSerializer, PostUpdateSerializer
-from rest_framework.views import APIView
+from rest_framework import generics
 from rest_framework.response import Response
+from rest_framework.views import APIView
+
+from . import serializers
+from .models import Post
+
 # Create your views here.
+
 
 class HomePageView(ListView):
     model = Post
@@ -25,34 +28,34 @@ class ContactPageView(TemplateView):
     template_name = 'blog/page-contact.html'
 
 
-class AllPostsAPIView(ListAPIView):
+class AllPostsAPIView(generics.ListAPIView):
     queryset = Post.objects.all().order_by('-updated_at')
-    serializer_class = AllPostsSerializer
+    serializer_class = serializers.AllPostsSerializer
 
 
-class PostDetailAPIView(RetrieveAPIView):
+class PostDetailAPIView(generics.RetrieveAPIView):
     queryset = Post.objects.all()
-    serializer_class = PostDetailSerializer
+    serializer_class = serializers.PostDetailSerializer
 
 
-class PostSearchAPIView(ListAPIView):
-    serializer_class = AllPostsSerializer
+class PostSearchAPIView(generics.ListAPIView):
+    serializer_class = serializers.AllPostsSerializer
 
     def get_queryset(self):
         from django.db.models import Q
         query = self.request.GET['query']
-        return Post.objects.filter(Q(title__icontains=query) | Q(body__icontains=query)).order_by('-updated_at')    
+        return Post.objects.filter(Q(title__icontains=query) | Q(body__icontains=query)).order_by('-updated_at')
 
 
-class PostCreateAPIView(CreateAPIView):
+class PostCreateAPIView(generics.CreateAPIView):
     model = Post
-    serializer_class = PostCreateSerializer
+    serializer_class = serializers.PostCreateSerializer
 
 
-class PostUpdateAPIView(UpdateAPIView):
+class PostUpdateAPIView(generics.UpdateAPIView):
     queryset = Post.objects.all()
-    serializer_class = PostUpdateSerializer
+    serializer_class = serializers.PostUpdateSerializer
 
 
-class PostDeleteAPIView(DestroyAPIView):
+class PostDeleteAPIView(generics.DestroyAPIView):
     queryset = Post.objects.all()
