@@ -1,10 +1,10 @@
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView, TemplateView
 from .models import Post
-from rest_framework.generics import ListAPIView, RetrieveAPIView, CreateAPIView
-from .serializers import AllPostsSerializer, PostDetailSerializer, PostCreateSerializer
+from rest_framework.generics import ListAPIView, RetrieveAPIView, CreateAPIView, UpdateAPIView
+from .serializers import AllPostsSerializer, PostDetailSerializer, PostCreateSerializer, PostUpdateSerializer
 from rest_framework.views import APIView
-
+from rest_framework.response import Response
 # Create your views here.
 
 class HomePageView(ListView):
@@ -47,3 +47,8 @@ class PostSearchAPIView(ListAPIView):
 class PostCreateAPIView(CreateAPIView):
     model = Post
     serializer_class = PostCreateSerializer
+
+
+class PostUpdateAPIView(UpdateAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostUpdateSerializer

@@ -1,4 +1,5 @@
 from rest_framework import serializers
+
 from .models import Post
 
 
@@ -36,7 +37,8 @@ class PostDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        exclude = ['id', 'author', 'status', 'created_at', 'updated_up', 'promote', 'slug']
+        exclude = ['id', 'author', 'status',
+                   'created_at', 'updated_at', 'promote', 'slug']
 
     def get_category(self, instance):
         if instance.category:
@@ -64,3 +66,13 @@ class PostCreateSerializer(serializers.ModelSerializer):
 
         return new_post
 
+
+class PostUpdateSerializer(serializers.ModelSerializer):
+    title = serializers.CharField(required=False)
+    short_description = serializers.CharField(required=False)
+    body = serializers.CharField(required=False)
+
+    class Meta:
+        model = Post
+        fields = ['title', 'short_description',
+                  'cover', 'body', 'category', 'study_time']
